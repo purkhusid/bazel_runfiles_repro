@@ -1,0 +1,25 @@
+load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
+load("//rules/echoer:defs.bzl", "echoer")
+
+# gazelle:prefix github.com/purkhusid/bazel_runfiles_repro
+# gazelle:build_file_name BUILD.bazel
+gazelle_binary(
+    name = "gazelle",
+    languages = DEFAULT_LANGUAGES + [
+    ],
+    visibility = ["//visibility:public"],
+)
+
+gazelle(
+    name = "gazelle_update_repos",
+    args = [
+        "-from_file=go.mod",
+        "-to_macro=3rdparty/go/godeps_macro.bzl%go_repositories",
+        "-prune",
+    ],
+    command = "update-repos",
+)
+
+echoer(
+    name = "uploader",
+)
